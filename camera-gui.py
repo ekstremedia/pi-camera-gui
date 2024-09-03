@@ -7,17 +7,29 @@ from camera_widgets import display_camera_widgets
 class CameraApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        
-        self.title("Raspberry Pi Camera Controller")
-        self.geometry("600x400")
-        self.grid_columnconfigure(1, weight=1)
 
-        self.camera_controller = CameraController()
+        self.camera_controller = CameraController()  # Initialize CameraController first
+        self.title("Raspberry Pi Camera Controller")
+
+        # Load the saved geometry or set to default
+        geometry = self.camera_controller.load_window_geometry()
+        self.geometry(geometry)
+
+        # Center the window if this is the first run
+        if geometry == "600x400":
+            self.center_window()
+
+        self.grid_columnconfigure(1, weight=1)
         self.server_url = ctk.StringVar(value=self.camera_controller.settings["server_url"])
         self.connection_status = ctk.StringVar(value="Disconnected")  # Default status
 
         # UI Elements
         self.create_widgets()
+
+        # Bind the window close event to save geometry
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+
 
     def configure_camera(self):
         cameras = self.camera_controller.get_cameras()
@@ -134,6 +146,20 @@ class CameraApp(ctk.CTk):
                 save_path = save_file_dialog([("JPEG files", "*.jpg")])
                 if save_path:
                     show_messagebox("Download Complete", f"Simulated: Photo saved to {save_path}")
+
+    def center_window(self):
+        self.update_idletasks()
+        width = self.winfo_width()
+        height = self.winfo_height()
+        x = (self.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.winfo_screenheight() // 2) - (height // 2)
+        self.geometry(f'{width}x{height}+{x}+{y}')
+
+    def on_closing(self):
+        geometry = self.geometry()  # Get the current geometry (size and position)
+        self.camera_controller.save_window_geometry(geometry)
+        self.destroy()
+
 
 if __name__ == "__main__":
     app = CameraApp()

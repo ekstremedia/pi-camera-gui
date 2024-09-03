@@ -14,7 +14,15 @@ class CameraController:
         self.cameras = []
         self.connected = False
         self.load_data()
+        self.window_geometry = self.settings.get("window_geometry", "600x400")  # Default size
 
+    def save_window_geometry(self, geometry):
+        self.settings["window_geometry"] = geometry
+        self.save_data()
+
+    def load_window_geometry(self):
+        return self.settings.get("window_geometry", "600x400")
+    
     def update_server_url(self, new_url):
         self.settings["server_url"] = new_url
         self.save_data()
