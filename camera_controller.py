@@ -88,13 +88,13 @@ class CameraController:
             except Exception as e:
                 print(f"Failed to load data: {e}")
                 self.settings = {
-                    "server_url": "http://raspberrypi.local:5000",
+                    "server_url": "http://192.168.1.159:5000",
                     "default_save_path": "/path/to/default/save/directory"
                 }
                 self.cameras = []
         else:
             self.settings = {
-                "server_url": "http://raspberrypi.local:5000",
+                "server_url": "http://192.168.1.159:5000",
                 "default_save_path": "/path/to/default/save/directory"
             }
             self.cameras = []
