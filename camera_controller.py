@@ -8,7 +8,7 @@ class CameraController:
     def __init__(self, storage_path="cameras.json"):
         self.storage_path = storage_path
         self.settings = {
-            "server_url": "http://raspberrypi.local:5000",
+            "server_url": "http://192.168.1.159:5000",
             "default_save_path": "/path/to/default/save/directory"
         }
         self.cameras = []
